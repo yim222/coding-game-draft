@@ -1,6 +1,11 @@
 package rooks.movements;
 //https://www.codingame.com/ide/puzzle/rooks-movements
 
+/**
+ * U HERE - 
+ * You did handling to the direction by the position of the rook. But it's good to empty cases. Now You need to think how to integrate it with the others "Blocker" Concepts. 
+ * Notice that you just need to get the "close" blocker to the rook. You don't need to get all. And it's should be calculated on each direction. I don't sure I want to put it in the 
+ */
 import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeMap;

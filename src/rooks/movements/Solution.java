@@ -4,7 +4,23 @@ package rooks.movements;
 /**
  * U HERE - 
  * You did handling to the direction by the position of the rook. But it's good to empty cases. Now You need to think how to integrate it with the others "Blocker" Concepts. 
- * Notice that you just need to get the "close" blocker to the rook. You don't need to get all. And it's should be calculated on each direction. I don't sure I want to put it in the 
+ * Notice that you just need to get the "close" blocker to the rook. You don't need to get all. And it's should be calculated on each direction. I don't sure I want to put it in the same place
+ * 
+ * 
+ * TODO 2:
+ * 
+ * 		**It's according to the schema. Board contains rook, and have a static array of the moves. Rook have position and get all data,
+ * 			and calculating the things it needs, including the moves. 
+ * 			By running the "printMoves() it's should provide the solution.
+ * - create object Board, contains pieces and the rook. Also, Object position, Piece, Move (the string)
+ * - Replace the using to use position. 
+ * - Create arrayList from the pieces. as static on the board. 
+ * - On the rook create: 
+ * 		fields: moves[]
+ * 		methods: calculate blockers - for the routes. calculateMoves - with the routes. Print Moves. 
+ * 
+ * - At the end clean and write comments. 
+ * 		
  */
 import java.util.Map;
 import java.util.Scanner;
@@ -54,7 +70,7 @@ public class Solution {
 		System.out.println("ANSWER");
 		int cv = 'b' - 96;
 		System.out.println(cv);
-		Route r = new Route(Direction.LEFT, 5, 'd');
+		Route r = new Route(Direction.LEFT, 5, 'd'/*Piece blockerPosition*/);
 		r.generatePaths();
 		System.err.println("route LEFT = " + r.describe + " to string = " + r);
 
@@ -93,7 +109,29 @@ public class Solution {
 
 }
 
-class Rook {
+class Position{
+	private char column;// a-96 = 1;
+	private int row;
+	public char getColumn() {
+		return column;
+	}
+	public void setColumn(char column) {
+		this.column = column;
+	}
+	public int getRow() {
+		return row;
+	}
+	public void setRow(int row) {
+		this.row = row;
+	}
+	@Override
+	public String toString() {
+		return "Position [column=" + column + ", row=" + row + "]";
+	}
+	
+}
+
+class Rook {//to use position
 	private char column;// a-96 = 1;
 	private int row;
 	Map<Direction, Route> availableRoutes = new TreeMap<>();
@@ -104,7 +142,7 @@ class Rook {
 	}
 }
 
-class Route {
+class Route {//to use position
 
 	int rookLine;
 	char rookColumn;
@@ -119,7 +157,7 @@ class Route {
 		this.direction = direction;
 	}
 
-	public void generatePaths() {
+	public void generatePaths() {//to use position
 
 		switch (direction) {
 		case LEFT:// should take the rook line on first col to the before the rookCol. For example

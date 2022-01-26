@@ -1,6 +1,7 @@
 package rooks.movements;
 //https://www.codingame.com/ide/puzzle/rooks-movements
 
+import java.util.ArrayList;
 /**
  * U HERE - 
  * You did handling to the direction by the position of the rook. But it's good to empty cases. Now You need to think how to integrate it with the others "Blocker" Concepts. 
@@ -12,8 +13,12 @@ package rooks.movements;
  * 		**It's according to the schema. Board contains rook, and have a static array of the moves. Rook have position and get all data,
  * 			and calculating the things it needs, including the moves. 
  * 			By running the "printMoves() it's should provide the solution.
- * - create object Board, contains pieces and the rook. Also, Object position, Piece, Move (the string)
- * - Replace the using to use position. 
+ * 
+ * U here - I have started with converting to use position. Continue with the other things in the first line.
+ * 
+ * 
+ * - create object Board, contains pieces and the rook. Also, Object position, Piece, Move (the string)-V
+ * - Replace the using to use position. -V
  * - Create arrayList from the pieces. as static on the board. 
  * - On the rook create: 
  * 		fields: moves[]
@@ -68,22 +73,30 @@ public class Solution {
 //https://www.codingame.com/ide/puzzle/rooks-movements
 	public static void main(String args[]) {
 		System.out.println("ANSWER");
+		String[] inputs = {"d5"};
+		
+		String rookPosition = inputs[0];// here is the string. 
+		
+		char column = rookPosition.charAt(0);
+		int row = Integer.parseInt(rookPosition.charAt(1)+"");
 		int cv = 'b' - 96;
 		System.out.println(cv);
-		Route r = new Route(Direction.LEFT, 5, 'd'/*Piece blockerPosition*/);
+		
+		Position position1 = new Position(column, row);
+		Route r = new Route(Direction.LEFT, position1/*Piece blocker*/);
 		r.generatePaths();
 		System.err.println("route LEFT = " + r.describe + " to string = " + r);
 
-		r = new Route(Direction.RIGHT, 5, 'd');
+		r = new Route(Direction.RIGHT, position1);
 		r.generatePaths();
 		System.err.println("route RIGHT = " + r.describe + " to string = " + r);
 		
 		
-		r = new Route(Direction.DOWN, 5, 'd');
+		r = new Route(Direction.DOWN, position1);
 		r.generatePaths();
 		System.err.println("route DOWN = " + r.describe + " to string = " + r);
 		
-		r = new Route(Direction.UP, 5, 'd');
+		r = new Route(Direction.UP, position1);
 		r.generatePaths();
 		System.err.println("route UP = " + r.describe + " to string = " + r);
 
@@ -112,6 +125,21 @@ public class Solution {
 class Position{
 	private char column;// a-96 = 1;
 	private int row;
+	
+	public Position() {
+		super();
+	}
+	public Position(char column, int row) {
+		super();
+		this.column = column;
+		this.row = row;
+	}
+	
+	public Position(String positionString) {		
+		column = positionString.charAt(0);
+		row = Integer.parseInt(positionString.charAt(1)+"");
+		
+	}
 	public char getColumn() {
 		return column;
 	}
@@ -131,30 +159,61 @@ class Position{
 	
 }
 
-class Rook {//to use position
-	private char column;// a-96 = 1;
-	private int row;
-	Map<Direction, Route> availableRoutes = new TreeMap<>();
+class Rook {
+	private Position position;
+	private Map<Direction, Route> availableRoutes = new TreeMap<>();
 
-	public Rook(char column, int row) {
-		this.column = column;
-		this.row = row;
+	public Rook(Position position) {
+		this.position = position;
 	}
+
+	public Position getPosition() {
+		return position;
+	}
+
+	public void setPosition(Position position) {
+		this.position = position;
+	}
+
+	public Map<Direction, Route> getAvailableRoutes() {
+		return availableRoutes;
+	}
+
+	public void setAvailableRoutes(Map<Direction, Route> availableRoutes) {
+		this.availableRoutes = availableRoutes;
+	}
+
+	@Override
+	public String toString() {
+		return "Rook [position=" + position + ", availableRoutes=" + availableRoutes + "]";
+	}
+	
+	
+	
 }
 
 class Route {//to use position
 
-	int rookLine;
-	char rookColumn;
+	Position position;
 	Direction direction;
 	String describe;
+	Blocker blockerType;
+	Piece blockerPiece;
+	char connectionSign = '-';
 	int from, to;
 
-	public Route(Direction direction, int rookLine, char rookColumn) {
+	public Route(Direction direction, Position position) {
 		super();
-		this.rookLine = rookLine;
-		this.rookColumn = rookColumn;
+		this.position = position;
 		this.direction = direction;
+		
+		
+	}
+
+	@Override
+	public String toString() {
+		return "Route [position=" + position + ", direction=" + direction + ", describe=" + describe + ", from=" + from
+				+ ", to=" + to + "]";
 	}
 
 	public void generatePaths() {//to use position
@@ -162,59 +221,59 @@ class Route {//to use position
 		switch (direction) {
 		case LEFT:// should take the rook line on first col to the before the rookCol. For example
 					// - if the rook on d5 - a-c5
-			if (rookColumn - 96 == 1) {
+			if (position.getColumn() - 96 == 1) {
 				from = 0;
 				to = 0;
 				describe = "0";
 			} else {
 
 				from = 1;
-				to = rookColumn - 96 - 1;
-				describe = (char) (from + 96) + "-" + (char) (to + 96) + "" + rookLine;
+				to = position.getColumn() - 96 - 1;
+				describe = (char) (from + 96) + "-" + (char) (to + 96) + "" + position.getRow();
 
 			}
 			break;
 		case RIGHT:// should take the rook line from the next column of the rook to the  the last. For example
 					// - if the rook on d5 - e-h5
-			if (rookColumn - 96 == 8) {//if the rook at the last column
+			if (position.getColumn() - 96 == 8) {//if the rook at the last column
 				from = 0;
 				to = 0;
 				describe = "0";
 			} else {
 
-				from = rookColumn - 96 + 1;
+				from = position.getColumn() - 96 + 1;
 				to = 8;
-				describe = (char) (from + 96) + "-" + (char) (to + 96) + "" + rookLine;
+				describe = (char) (from + 96) + "-" + (char) (to + 96) + "" + position.getRow();
 
 			}
 			break;
 			
-		case DOWN:// should take the rook columns from the first line to the before the rookline. For example
+		case DOWN:// should take the rook columns from the first line to the before the position.getRow(). For example
 			// - if the rook on d5 - d1-3
-			if (rookLine  ==1) {
+			if (position.getRow()  ==1) {
 				from = 0;
 				to = 0;
 				describe = "0";
 			} else {
 
 				from = 1;
-				to = rookLine-1;
-				describe = rookColumn + "" + from  + "-"   + to;
+				to = position.getRow()-1;
+				describe = position.getColumn() + "" + from  + "-"   + to;
 
 			}
 			break;
 			
 		case UP:// should take the rook columns from the next line of the rook to the  the lase line. For example
 			// - if the rook on d5 - d6-8
-			if (rookLine  ==8) {//last line
+			if (position.getRow() ==8) {//last line
 				from = 0;
 				to = 0;
 				describe = "0";
 			} else {
 
-				from = rookLine + 1;
+				from = position.getRow() + 1;
 				to = 8;
-				describe = rookColumn + "" + from  + "-"   + to;
+				describe = position.getColumn() + "" + from  + "-"   + to;
 
 			}
 			break;
@@ -224,29 +283,73 @@ class Route {//to use position
 
 	}
 
+	
+
+}
+
+class Board{
+	public Board (Rook myRook) {
+		
+	}
+	public static ArrayList<Piece> pieces = new ArrayList<>();
+	
+	public static void addPiece(Piece piece) {
+		pieces.add(piece);
+	}
+	
+}
+
+class Piece{
+	
+	private Position position;
+	private char toolSign;
+	private int color;//color is either 0 (WHITE) or 1 (BLACK)
+	
+
+	
+	
+	
+	public Piece() {
+		
+	}
+	public Piece(Position position, char toolSign) {
+		super();
+		this.position = position;
+		this.toolSign = toolSign;
+	}
+	public Position getPosition() {
+		return position;
+	}
+	public void setPosition(Position position) {
+		this.position = position;
+	}
+	public char getToolSign() {
+		return toolSign;
+	}
+	public void setToolSign(char toolSign) {
+		this.toolSign = toolSign;
+	}
+	public int getColor() {
+		return color;
+	}
+	public void setColor(int color) {
+		this.color = color;
+	}
 	@Override
 	public String toString() {
-		return "Route [rookLine=" + rookLine + ", rookColumn=" + rookColumn + ", direction=" + direction + ", describe="
-				+ describe + ", from=" + from + ", to=" + to + "]";
+		return "Piece [position=" + position + ", toolSign=" + toolSign + ", color=" + color + "]";
 	}
-
+	
+	
+	
+	
 }
 
-class VerticalRoute extends Route {
-
-	public VerticalRoute(Direction direction, int rookLine, char rookColumn) {
-		super(direction, rookLine, rookColumn);
-	}
-
+class Move{
+	
 }
 
-class HorizonalRoute extends Route {
 
-	public HorizonalRoute(Direction direction, int rookLine, char rookColumn) {
-		super(direction, rookLine, rookColumn);
-	}
-
-}
 
 enum Direction {
 	LEFT, DOWN, UP, RIGHT
@@ -255,6 +358,7 @@ enum Direction {
 enum Blocker {
 	WALL, ALLY, OPPONENT
 }
+
 
 class AvailableMoves {
 	Direction direction;

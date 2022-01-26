@@ -4,9 +4,20 @@ package rooks.movements;
 import java.util.ArrayList;
 /**
  * U HERE - 
- * You did handling to the direction by the position of the rook. But it's good to empty cases. Now You need to think how to integrate it with the others "Blocker" Concepts. 
- * Notice that you just need to get the "close" blocker to the rook. You don't need to get all. And it's should be calculated on each direction. I don't sure I want to put it in the same place
  * 
+ * U did getting the pieces to the board. It's working well on the online editor too. tested. 
+ * - Now you need to (all do with streams!) 
+ * A task -
+ *  1- From the rook - to get the blockers on each route. First - search for pieces that on the rook road. By direction. Do it by stream. filter those
+ *  that have no row OR column equal to the Rook row/columns. 
+ *  2 - To associate each of them to the right direction (l , b , t ,r ). On each association, if exist already a tool, check what's closer to the rook. (Possible also to start from the rook, and search I don't sure it's more efficient). 
+ * 	3 - Then you should have a blockers to each side (u can do it with map, and also possible that it will be empty). 
+ * B task - 
+ * Then you need to provide this blocker piece to the corresponding route. AND on the route to add this to the calculation. 
+ * From there - conitnue. 
+ * 
+ * 
+ * add blicker calculation to the route, 
  * 
  * TODO 2:
  * 
@@ -14,12 +25,11 @@ import java.util.ArrayList;
  * 			and calculating the things it needs, including the moves. 
  * 			By running the "printMoves() it's should provide the solution.
  * 
- * U here - I have started with converting to use position. Continue with the other things in the first line.
  * 
  * 
  * - create object Board, contains pieces and the rook. Also, Object position, Piece, Move (the string)-V
  * - Replace the using to use position. -V
- * - Create arrayList from the pieces. as static on the board. 
+ * - Create arrayList from the pieces. as static on the board. - V Done 
  * - On the rook create: 
  * 		fields: moves[]
  * 		methods: calculate blockers - for the routes. calculateMoves - with the routes. Print Moves. 

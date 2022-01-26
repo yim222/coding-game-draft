@@ -75,13 +75,26 @@ public class Solution {
 		System.out.println("ANSWER");
 		String[] inputs = {"d5"};
 		
+		int [] colors = {1,0,1};
+		String [] piecesProvided = {"c1", "e8", "d3"};
+		
 		String rookPosition = inputs[0];// here is the string. 
 		
 		char column = rookPosition.charAt(0);
 		int row = Integer.parseInt(rookPosition.charAt(1)+"");
 		int cv = 'b' - 96;
 		System.out.println(cv);
-		
+		for (int i = 0; i < colors.length ; i++ ) {
+			int colour = colors[i];
+            String onePiece = piecesProvided[i];
+            
+            Position piecePosition = new Position(onePiece);
+            Piece piece = new Piece(piecePosition, colour);
+            
+            Board.addPiece(piece);
+            
+		}
+		System.err.println("Board pieces test - " + Board.pieces);
 		Position position1 = new Position(column, row);
 		Route r = new Route(Direction.LEFT, position1/*Piece blocker*/);
 		r.generatePaths();
@@ -297,12 +310,14 @@ class Board{
 		pieces.add(piece);
 	}
 	
+	
+	
 }
 
 class Piece{
 	
 	private Position position;
-	private char toolSign;
+	private char toolSign = '*';// * = unknown
 	private int color;//color is either 0 (WHITE) or 1 (BLACK)
 	
 
@@ -312,11 +327,19 @@ class Piece{
 	public Piece() {
 		
 	}
-	public Piece(Position position, char toolSign) {
+	
+	
+	
+	
+	public Piece(Position position, int color) {
 		super();
 		this.position = position;
-		this.toolSign = toolSign;
+		this.color = color;
 	}
+
+
+
+
 	public Position getPosition() {
 		return position;
 	}

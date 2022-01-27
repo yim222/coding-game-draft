@@ -2,22 +2,25 @@ package rooks.movements;
 //https://www.codingame.com/ide/puzzle/rooks-movements
 
 import java.util.ArrayList;
+import java.util.List;
 /**
- * U HERE - 
  * 
- * U did getting the pieces to the board. It's working well on the online editor too. tested. 
- * - Now you need to (all do with streams!) 
+ * 
  * A task -
  *  1- From the rook - to get the blockers on each route. First - search for pieces that on the rook road. By direction. Do it by stream. filter those
- *  that have no row OR column equal to the Rook row/columns. 
- *  2 - To associate each of them to the right direction (l , b , t ,r ). On each association, if exist already a tool, check what's closer to the rook. (Possible also to start from the rook, and search I don't sure it's more efficient). 
- * 	3 - Then you should have a blockers to each side (u can do it with map, and also possible that it will be empty). 
+ *  that have no row OR column equal to the Rook row/columns. - DONE
+ *  2 - To associate each of them to the right direction (l , b , t ,r ). On each association, if exist already a tool, check what's closer to the rook. - V DONE (Possible also to start from the rook, and search I don't sure it's more efficient). 
+ * 	3 - Then you should have a blockers to each side (u can do it with map, and also possible that it will be empty). - DONE
+ * 
+ *  U here read 3. 
  * B task - 
  * Then you need to provide this blocker piece to the corresponding route. AND on the route to add this to the calculation. 
+ * the result should be that each route have from too corrects and blocker corrects.
  * From there - conitnue. 
  * 
  * 
- * add blicker calculation to the route, 
+ * add blocker calculation to the route, (I suggest to choose sorted list/set for let it handle the lexicography  by itself. Also use the description to build a general
+ * move object for any piece). 
  * 
  * TODO 2:
  * 
@@ -38,8 +41,9 @@ import java.util.ArrayList;
  * 		
  */
 import java.util.Map;
-import java.util.Scanner;
 import java.util.TreeMap;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 /**
  * 
@@ -85,8 +89,8 @@ public class Solution {
 		System.out.println("ANSWER");
 		String[] inputs = {"d5"};
 		
-		int [] colors = {1,0,1};
-		String [] piecesProvided = {"c1", "e8", "d3"};
+		int [] colors = {1,0,1, 0, 1};
+		String [] piecesProvided = {"c1", "e8", "d3", "b5", "a5"};
 		
 		String rookPosition = inputs[0];// here is the string. 
 		
@@ -106,6 +110,9 @@ public class Solution {
 		}
 		System.err.println("Board pieces test - " + Board.pieces);
 		Position position1 = new Position(column, row);
+		Rook rook1 = new Rook(new Position(rookPosition));
+		System.err.println("rook1 = " + rook1);
+		
 		Route r = new Route(Direction.LEFT, position1/*Piece blocker*/);
 		r.generatePaths();
 		System.err.println("route LEFT = " + r.describe + " to string = " + r);
@@ -185,9 +192,78 @@ class Position{
 class Rook {
 	private Position position;
 	private Map<Direction, Route> availableRoutes = new TreeMap<>();
+	private Map<Direction, Piece> blockerPiecesMap = new TreeMap<>();
 
+	private List<Piece> blockerPieces;
 	public Rook(Position position) {
 		this.position = position;
+		getAndFilterPieces();
+		System.err.println("blockerPieces = " +  blockerPieces);
+	}
+	
+	public void getAndFilterPieces() {
+		
+		blockerPieces = new ArrayList<>(Board.pieces);
+		
+		blockerPieces = blockerPieces.stream()
+		.filter(piece -> piece.getPosition().getColumn() == position.getColumn() || piece.getPosition().getRow() == position.getRow())
+		.collect(Collectors.toList());
+		
+		//preparing the blockers map object
+		
+		blockerPiecesMap.put(Direction.LEFT, null);
+		blockerPiecesMap.put(Direction.DOWN, null);
+		blockerPiecesMap.put(Direction.UP, null);
+		blockerPiecesMap.put(Direction.RIGHT, null);
+		
+		//associating each piece with the right direction
+		
+		blockerPieces.stream().forEach((piece) -> {
+
+			Position piecePosition = piece.getPosition();
+			System.out.println((piecePosition.getColumn() < position.getColumn()) + " piece = " + piece);
+			if (piecePosition.getColumn() < position.getColumn()) {// left blocker
+			System.err.println("left??");
+				if (blockerPiecesMap.get(Direction.LEFT) == null
+						|| blockerPiecesMap.get(Direction.LEFT).getPosition().getColumn() < piecePosition.getColumn()) {// if it's closer to the rook
+					blockerPiecesMap.put(Direction.LEFT, piece);
+
+				}
+
+			} 
+			else if (piecePosition.getRow() < position.getRow()) {// down blocker
+				if (blockerPiecesMap.get(Direction.DOWN) == null
+						|| blockerPiecesMap.get(Direction.DOWN).getPosition().getRow() < piecePosition.getRow()) {// same
+																													// concept
+
+					blockerPiecesMap.put(Direction.DOWN, piece);
+
+				}
+			}
+			else if (piecePosition.getRow() > position.getRow()) {// up blocker
+				if (blockerPiecesMap.get(Direction.UP) == null
+						|| blockerPiecesMap.get(Direction.UP).getPosition().getRow() > piecePosition.getRow()) {// same
+																													// concept
+
+					blockerPiecesMap.put(Direction.UP, piece);
+
+				}
+			}
+			
+			else if (piecePosition.getColumn() > position.getColumn()) {// right blocker
+				if (blockerPiecesMap.get(Direction.RIGHT) == null
+						|| blockerPiecesMap.get(Direction.RIGHT).getPosition().getColumn() > piecePosition.getColumn()) {//same concept
+					blockerPiecesMap.put(Direction.RIGHT, piece);
+
+				}
+
+			}			
+			
+		});
+
+
+
+		
 	}
 
 	public Position getPosition() {
@@ -208,8 +284,11 @@ class Rook {
 
 	@Override
 	public String toString() {
-		return "Rook [position=" + position + ", availableRoutes=" + availableRoutes + "]";
+		return "Rook [position=" + position + ", availableRoutes=" + availableRoutes + ", blockerPiecesMap="
+				+ blockerPiecesMap + ", blockerPieces=" + blockerPieces + "]";
 	}
+
+	
 	
 	
 	

@@ -15,7 +15,7 @@ import java.util.List;
  *  U here read 3. 
  * B task - 
  * Then you need to provide this blocker piece to the corresponding route. AND on the route to add this to the calculation. 
- * the result should be that each route have from too corrects and blocker corrects.
+ * the result should be that each route have from to corrects and blocker corrects.
  * From there - conitnue. 
  * 
  * 
@@ -33,7 +33,7 @@ import java.util.List;
  * - create object Board, contains pieces and the rook. Also, Object position, Piece, Move (the string)-V
  * - Replace the using to use position. -V
  * - Create arrayList from the pieces. as static on the board. - V Done 
- * - On the rook create: 
+ * - On the rook create: - U here 
  * 		fields: moves[]
  * 		methods: calculate blockers - for the routes. calculateMoves - with the routes. Print Moves. 
  * 
@@ -112,41 +112,7 @@ public class Solution {
 		Position position1 = new Position(column, row);
 		Rook rook1 = new Rook(new Position(rookPosition));
 		System.err.println("rook1 = " + rook1);
-		
-		Route r = new Route(Direction.LEFT, position1/*Piece blocker*/);
-		r.generatePaths();
-		System.err.println("route LEFT = " + r.describe + " to string = " + r);
-
-		r = new Route(Direction.RIGHT, position1);
-		r.generatePaths();
-		System.err.println("route RIGHT = " + r.describe + " to string = " + r);
-		
-		
-		r = new Route(Direction.DOWN, position1);
-		r.generatePaths();
-		System.err.println("route DOWN = " + r.describe + " to string = " + r);
-		
-		r = new Route(Direction.UP, position1);
-		r.generatePaths();
-		System.err.println("route UP = " + r.describe + " to string = " + r);
-
-
-
-//		Scanner in = new Scanner(System.in);
-//		String rookPosition = in.next();
-
-//		char column = rookPosition.charAt(0);
-//		int row = Integer.parseInt(rookPosition.charAt(1)+"");
-//		System.err.println("column = " + column +  " row = " + row);
-//		int nbPieces = in.nextInt();
-//		for (int i = 0; i < nbPieces; i++) {
-//			int colour = in.nextInt();
-//			String onePiece = in.next();
-//		}
-
-		// Write an answer using System.out.println()
-		// To debug: System.err.println("Debug messages...");
-
+	
 		System.out.println("ANSWER");
 	}
 
@@ -189,15 +155,17 @@ class Position{
 	
 }
 
-class Rook {
-	private Position position;
+class Rook extends Piece{
+
 	private Map<Direction, Route> availableRoutes = new TreeMap<>();
 	private Map<Direction, Piece> blockerPiecesMap = new TreeMap<>();
 
 	private List<Piece> blockerPieces;
 	public Rook(Position position) {
-		this.position = position;
+		super(position, 'R', 0);
 		getAndFilterPieces();
+
+		Route test = new Route(this, Direction.LEFT,  blockerPiecesMap.get(Direction.LEFT));
 		System.err.println("blockerPieces = " +  blockerPieces);
 	}
 	
@@ -294,12 +262,18 @@ class Rook {
 	
 }
 
+/**
+ * Generates by the piece and the other data the right route direction
+ * @author lingar
+ *
+ */
 class Route {//to use position
-
+	
+	Piece currentPiece;
 	Position position;
 	Direction direction;
 	String describe;
-	Blocker blockerType;
+	Blocker blockerType = Blocker.WALL;
 	Piece blockerPiece;
 	char connectionSign = '-';
 	int from, to;
@@ -308,9 +282,30 @@ class Route {//to use position
 		super();
 		this.position = position;
 		this.direction = direction;
+	
 		
 		
 	}
+	
+	
+
+	public Route(Piece currentPiece, Direction direction, Piece blockerPiece) {
+		super();
+		this.currentPiece = currentPiece;
+		this.direction = direction;
+		this.blockerPiece = blockerPiece;
+		System.err.println("??/ rook sign = " + currentPiece.getToolSign());
+
+		switch(currentPiece.getToolSign()) {
+		case 'R':
+			generatePathsForRook();
+			break;
+		
+		}
+	}
+	
+	
+
 
 	@Override
 	public String toString() {
@@ -318,7 +313,10 @@ class Route {//to use position
 				+ ", to=" + to + "]";
 	}
 
-	public void generatePaths() {//to use position
+	public void generatePathsForRookOld() {//to use position
+
+		
+		
 
 		switch (direction) {
 		case LEFT:// should take the rook line on first col to the before the rookCol. For example
@@ -384,6 +382,85 @@ class Route {//to use position
 		}
 
 	}
+	
+	
+	public void generatePathsForRook() {//to use position
+		System.err.println("Testing - generatePathsForRook");
+		//first set the blockerType
+		if(blockerPiece.getColor() == currentPiece.getColor()) {
+			blockerType = Blocker.ALLY;
+		}
+		else if(blockerPiece.getColor() != currentPiece.getColor()) {
+			blockerType = Blocker.OPPONENT;
+		}
+
+		switch (direction) {
+		case LEFT:// should take the rook line on first col to the before the rookCol. For example
+					// - if the rook on d5 - a-c5
+			if (currentPiece.getPosition().getColumn() - 96 == 1) {//It's next to the wall
+				from = 0;
+				to = 0;
+				describe = "0";
+			} else {//This happening only when blocker not a wall
+
+				from = 1;
+				
+				
+				to = currentPiece.getPosition().getColumn() - 96 - 1;//U need to consider the blocker type and position
+				
+				describe = (char) (from + 96) + "-" + (char) (to + 96) + "" + currentPiece.getPosition().getRow();
+
+			}
+			break;
+		case RIGHT:// should take the rook line from the next column of the rook to the  the last. For example
+					// - if the rook on d5 - e-h5
+			if (currentPiece.getPosition().getColumn() - 96 == 8) {//if the rook at the last column
+				from = 0;
+				to = 0;
+				describe = "0";
+			} else {
+
+				from = currentPiece.getPosition().getColumn() - 96 + 1;
+				to = 8;
+				describe = (char) (from + 96) + "-" + (char) (to + 96) + "" + currentPiece.getPosition().getRow();
+
+			}
+			break;
+			
+		case DOWN:// should take the rook columns from the first line to the before the position.getRow(). For example
+			// - if the rook on d5 - d1-3
+			if (currentPiece.getPosition().getRow()  ==1) {
+				from = 0;
+				to = 0;
+				describe = "0";
+			} else {
+
+				from = 1;
+				to = currentPiece.getPosition().getRow()-1;
+				describe = currentPiece.getPosition().getColumn() + "" + from  + "-"   + to;
+
+			}
+			break;
+			
+		case UP:// should take the rook columns from the next line of the rook to the  the lase line. For example
+			// - if the rook on d5 - d6-8
+			if (currentPiece.getPosition().getRow() ==8) {//last line
+				from = 0;
+				to = 0;
+				describe = "0";
+			} else {
+
+				from = currentPiece.getPosition().getRow() + 1;
+				to = 8;
+				describe = currentPiece.getPosition().getColumn() + "" + from  + "-"   + to;
+
+			}
+			break;
+
+
+		}
+
+	}
 
 	
 
@@ -405,9 +482,9 @@ class Board{
 
 class Piece{
 	
-	private Position position;
-	private char toolSign = '*';// * = unknown
-	private int color;//color is either 0 (WHITE) or 1 (BLACK)
+	protected Position position;
+	protected char toolSign = '*';// * = unknown
+	protected int color;//color is either 0 (WHITE) or 1 (BLACK)
 	
 
 	
@@ -423,6 +500,19 @@ class Piece{
 	public Piece(Position position, int color) {
 		super();
 		this.position = position;
+		this.color = color;
+	}
+
+
+
+	
+
+
+
+	public Piece(Position position, char toolSign, int color) {
+		super();
+		this.position = position;
+		this.toolSign = toolSign;
 		this.color = color;
 	}
 
@@ -479,3 +569,44 @@ class AvailableMoves {
 	int fromRow;
 	
 }
+
+
+
+/*
+ *Grabage"
+ *
+ * 
+ */
+//		Route r = new Route(Direction.LEFT, position1Piece blocker);
+//		r.generatePathsForRookOld();
+//		System.err.println("route LEFT = " + r.describe + " to string = " + r);
+//
+//		r = new Route(Direction.RIGHT, position1);
+//		r.generatePathsForRookOld();
+//		System.err.println("route RIGHT = " + r.describe + " to string = " + r);
+//		
+//		
+//		r = new Route(Direction.DOWN, position1);
+//		r.generatePathsForRookOld();
+//		System.err.println("route DOWN = " + r.describe + " to string = " + r);
+//		
+//		r = new Route(Direction.UP, position1);
+//		r.generatePathsForRookOld();
+//		System.err.println("route UP = " + r.describe + " to string = " + r);
+//
+
+
+//		Scanner in = new Scanner(System.in);
+//		String rookPosition = in.next();
+
+//		char column = rookPosition.charAt(0);
+//		int row = Integer.parseInt(rookPosition.charAt(1)+"");
+//		System.err.println("column = " + column +  " row = " + row);
+//		int nbPieces = in.nextInt();
+//		for (int i = 0; i < nbPieces; i++) {
+//			int colour = in.nextInt();
+//			String onePiece = in.next();
+//		}
+
+		// Write an answer using System.out.println()
+		// To debug: System.err.println("Debug messages...");

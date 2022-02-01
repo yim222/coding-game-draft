@@ -32,7 +32,11 @@ import java.util.List;
  * - create object Board, contains pieces and the rook. Also, Object position, Piece, Move (the string)-V
  * - Replace the using to use position. -V
  * - Create arrayList from the pieces. as static on the board. - V Done 
- * - On the rook create: - IN PROGRESS... 
+ * - On the rook create: - IN PROGRESS... - U HERE: the route generates proper routes according to the blocker piece provided. NEXT: 
+ * 
+ * U need to assign it into the rook, all the routes. 
+ * Then do the below tasks. 
+ * 
  * 		fields: moves[]
  * 		methods: calculate blockers - for the routes. calculateMoves - with the routes. Print Moves. 
  * 
@@ -75,7 +79,7 @@ import java.util.stream.Collectors;
  *  2- Take the rook position and break it down to columns (char letter), and row. - DONE
  *  	
  *  3- Create method that calculate from those values the the available paths ( l b t r)  - 
- *  	3.1 - Pass over the tools, and create iterator, that check if there are some in the path of the ROOK. 
+ *  	3.1 - Pass over the tools, and create iterator, that check if there are some in the path of the ROOK. - 
  *  4 - Create a generator of moves string which Takes those 4 objects and iterate on each of them for creating proper string. 
  *  	4.1 On each loop - insert those values into Ordered list or set. (Or you can do the iterator right, and the order will be happen by itself).
  *  5- At the end - you just to need to print those values. 
@@ -397,7 +401,7 @@ class Route {//to use position
 	
 	
 	public void generatePathsForRook() {//to use position
-		System.err.println("Testing - generatePathsForRook");//U here - U need to handle null then U do need below see 11
+		System.err.println("Testing - generatePathsForRook");
 		//first set the blockerType
 		if(blockerPiece != null && blockerPiece.getColor() == currentPiece.getColor()) {
 			blockerType = Blocker.ALLY;

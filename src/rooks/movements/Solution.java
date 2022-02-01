@@ -12,7 +12,6 @@ import java.util.List;
  *  2 - To associate each of them to the right direction (l , b , t ,r ). On each association, if exist already a tool, check what's closer to the rook. - V DONE (Possible also to start from the rook, and search I don't sure it's more efficient). 
  * 	3 - Then you should have a blockers to each side (u can do it with map, and also possible that it will be empty). - DONE
  * 
- *  U here read 3. 
  * B task - 
  * Then you need to provide this blocker piece to the corresponding route. AND on the route to add this to the calculation. 
  * the result should be that each route have from to corrects and blocker corrects.
@@ -33,7 +32,7 @@ import java.util.List;
  * - create object Board, contains pieces and the rook. Also, Object position, Piece, Move (the string)-V
  * - Replace the using to use position. -V
  * - Create arrayList from the pieces. as static on the board. - V Done 
- * - On the rook create: - U here 
+ * - On the rook create: - IN PROGRESS... 
  * 		fields: moves[]
  * 		methods: calculate blockers - for the routes. calculateMoves - with the routes. Print Moves. 
  * 
@@ -70,12 +69,12 @@ import java.util.stream.Collectors;
  *  
  *  You can 	
  *  
- *  Task: 
+ *  Task: - old... 
  *  1 - Creat object Available paths, which have Enum - direction, Enum - Blocker (wall/ ally/ opponent). int starting from (not inculde the 
  *  Rook itself). - V
  *  2- Take the rook position and break it down to columns (char letter), and row. - DONE
  *  	
- *  3- Create method that calculate from those values the the available paths ( l b t r)  - U here
+ *  3- Create method that calculate from those values the the available paths ( l b t r)  - 
  *  	3.1 - Pass over the tools, and create iterator, that check if there are some in the path of the ROOK. 
  *  4 - Create a generator of moves string which Takes those 4 objects and iterate on each of them for creating proper string. 
  *  	4.1 On each loop - insert those values into Ordered list or set. (Or you can do the iterator right, and the order will be happen by itself).
@@ -89,7 +88,7 @@ public class Solution {
 		System.out.println("ANSWER");
 		String[] inputs = {"d5"};
 		
-		int [] colors = {1,0,1, 0, 1};
+		int [] colors = {1,0,1, 1, 1};
 		String [] piecesProvided = {"c1", "e8", "d3", "b5", "a5"};
 		
 		String rookPosition = inputs[0];// here is the string. 
@@ -165,8 +164,11 @@ class Rook extends Piece{
 		super(position, 'R', 0);
 		getAndFilterPieces();
 
-		Route test = new Route(this, Direction.LEFT,  blockerPiecesMap.get(Direction.LEFT));
-		System.err.println("blockerPieces = " +  blockerPieces);
+//		Route route = new Route(this, Direction.LEFT,  null);
+		Route route = new Route(this, Direction.LEFT,  blockerPiecesMap.get(Direction.LEFT));//
+
+		
+		System.err.println("blockerPieces = " +  blockerPieces + " \nRoute = " + route);
 	}
 	
 	public void getAndFilterPieces() {
@@ -307,11 +309,15 @@ class Route {//to use position
 	
 
 
+	
 	@Override
 	public String toString() {
-		return "Route [position=" + position + ", direction=" + direction + ", describe=" + describe + ", from=" + from
-				+ ", to=" + to + "]";
+		return "Route [ position=" + position + ", direction=" + direction
+				+ ", describe=" + describe + ", blockerType=" + blockerType + ", blockerPiece=" + blockerPiece
+				+ ", connectionSign=" + connectionSign + ", from=" + from + ", to=" + to + "]";
 	}
+
+
 
 	public void generatePathsForRookOld() {//to use position
 
@@ -385,13 +391,15 @@ class Route {//to use position
 	
 	
 	public void generatePathsForRook() {//to use position
-		System.err.println("Testing - generatePathsForRook");
+		System.err.println("Testing - generatePathsForRook");//U here - U need to handle null then U do need below see 11
 		//first set the blockerType
-		if(blockerPiece.getColor() == currentPiece.getColor()) {
+		if(blockerPiece != null && blockerPiece.getColor() == currentPiece.getColor()) {
 			blockerType = Blocker.ALLY;
 		}
-		else if(blockerPiece.getColor() != currentPiece.getColor()) {
+		else if(blockerPiece != null && blockerPiece.getColor() != currentPiece.getColor()) {
 			blockerType = Blocker.OPPONENT;
+			connectionSign = 'x';
+			
 		}
 
 		switch (direction) {
@@ -402,8 +410,21 @@ class Route {//to use position
 				to = 0;
 				describe = "0";
 			} else {//This happening only when blocker not a wall
+				//11 U need to handle here the three cases. Currently it's fit to WALL. Make it fit to ally/opponent too. 
+				if (blockerType == Blocker.WALL) {
+					from = 1;
 
-				from = 1;
+				}
+				
+				else if (blockerType == Blocker.ALLY) {
+					from = blockerPiece.getPosition().getColumn()-95;//one square to right
+
+				}
+				else if (blockerType == Blocker.OPPONENT) {
+					from = blockerPiece.getPosition().getColumn()-96;//one square to right
+
+				}
+				
 				
 				
 				to = currentPiece.getPosition().getColumn() - 96 - 1;//U need to consider the blocker type and position

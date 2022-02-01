@@ -88,8 +88,8 @@ public class Solution {
 		System.out.println("ANSWER");
 		String[] inputs = {"d5"};
 		
-		int [] colors = {1,0,0, 1, 1 , 1};
-		String [] piecesProvided = {"c1", "e8", "d3", "b5", "a5" , "g5"};
+		int [] colors = {1,0,0, 1, 1 , 1, 1};
+		String [] piecesProvided = {"c1", "e8", "d3", "b5", "a5" , "g5" , "d7"};
 		
 		String rookPosition = inputs[0];// here is the string. 
 		
@@ -166,8 +166,11 @@ class Rook extends Piece{
 
 //		Route route = new Route(this, Direction.DOWN,  null);
 //		Route route = new Route(this, Direction.DOWN,  blockerPiecesMap.get(Direction.DOWN));//
-		Route route = new Route(this, Direction.RIGHT,  null);
+//		Route route = new Route(this, Direction.RIGHT,  null);
 //		Route route = new Route(this, Direction.RIGHT,  blockerPiecesMap.get(Direction.RIGHT));//
+		
+//		Route route = new Route(this, Direction.UP,  null);
+		Route route = new Route(this, Direction.UP,  blockerPiecesMap.get(Direction.UP));//
 
 
 		
@@ -497,27 +500,28 @@ class Route {//to use position
 			}
 			break;
 			
-		case UP:// should take the rook columns from the next line of the rook to the  the lase line. For example
+		case UP:// should take the rook columns from the next line of the rook to the  the last line. For example
 			// - if the rook on d5 - d6-8
 			if (currentPiece.getPosition().getRow() ==8) {//last line
 				from = 0;
 				to = 0;
 				describe = "0";
 			} else {
+				from = currentPiece.getPosition().getRow() + 1;
+
 				//11 U need to handle here the three cases. Currently it's fit to WALL. Make it fit to ally/opponent too. 
 				if (blockerType == Blocker.WALL) {
 
-					from = currentPiece.getPosition().getRow() + 1;
 					to = 8;
 
 				}
 				
 				else if (blockerType == Blocker.ALLY) {
-					from = blockerPiece.getPosition().getRow() - 1;//one square below
+					to = blockerPiece.getPosition().getRow() - 1;//one square below
 
 				}
 				else if (blockerType == Blocker.OPPONENT) {
-					from = blockerPiece.getPosition().getRow();//the square itself
+					to = blockerPiece.getPosition().getRow();//the square itself
 
 				}
 				

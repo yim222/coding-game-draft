@@ -88,8 +88,8 @@ public class Solution {
 		System.out.println("ANSWER");
 		String[] inputs = {"d5"};
 		
-		int [] colors = {1,0,1, 1, 1};
-		String [] piecesProvided = {"c1", "e8", "d3", "b5", "a5"};
+		int [] colors = {1,0,0, 1, 1 , 1};
+		String [] piecesProvided = {"c1", "e8", "d3", "b5", "a5" , "g5"};
 		
 		String rookPosition = inputs[0];// here is the string. 
 		
@@ -164,8 +164,11 @@ class Rook extends Piece{
 		super(position, 'R', 0);
 		getAndFilterPieces();
 
-//		Route route = new Route(this, Direction.LEFT,  null);
-		Route route = new Route(this, Direction.LEFT,  blockerPiecesMap.get(Direction.LEFT));//
+//		Route route = new Route(this, Direction.DOWN,  null);
+//		Route route = new Route(this, Direction.DOWN,  blockerPiecesMap.get(Direction.DOWN));//
+		Route route = new Route(this, Direction.RIGHT,  null);
+//		Route route = new Route(this, Direction.RIGHT,  blockerPiecesMap.get(Direction.RIGHT));//
+
 
 		
 		System.err.println("blockerPieces = " +  blockerPieces + " \nRoute = " + route);
@@ -409,8 +412,8 @@ class Route {//to use position
 				from = 0;
 				to = 0;
 				describe = "0";
-			} else {//This happening only when blocker not a wall
-				//11 U need to handle here the three cases. Currently it's fit to WALL. Make it fit to ally/opponent too. 
+			} else {
+				// U need to handle here the three cases. Currently it's fit to WALL. Make it fit to ally/opponent too. 
 				if (blockerType == Blocker.WALL) {
 					from = 1;
 
@@ -440,25 +443,56 @@ class Route {//to use position
 				to = 0;
 				describe = "0";
 			} else {
-
+				//11 U need to handle here the three cases. Currently it's fit to WALL. Make it fit to ally/opponent too. 
 				from = currentPiece.getPosition().getColumn() - 96 + 1;
-				to = 8;
+
+				if (blockerType == Blocker.WALL) {
+					to = 8;
+
+				}
+				
+				else if (blockerType == Blocker.ALLY) {
+					to = blockerPiece.getPosition().getColumn() -96 -1;//one square to left
+
+				}
+				else if (blockerType == Blocker.OPPONENT) {
+					to = blockerPiece.getPosition().getColumn() -96;//the square itself
+
+				}
 				describe = (char) (from + 96) + "-" + (char) (to + 96) + "" + currentPiece.getPosition().getRow();
 
+				
 			}
 			break;
 			
 		case DOWN:// should take the rook columns from the first line to the before the position.getRow(). For example
-			// - if the rook on d5 - d1-3
+			// - if the rook on d5 - d1-4
 			if (currentPiece.getPosition().getRow()  ==1) {
 				from = 0;
 				to = 0;
 				describe = "0";
 			} else {
-
-				from = 1;
+				//11 U need to handle here the three cases. Currently it's fit to WALL. Make it fit to ally/opponent too. 
 				to = currentPiece.getPosition().getRow()-1;
+
+				if (blockerType == Blocker.WALL) {
+					from = 1;
+
+
+				}
+				
+				else if (blockerType == Blocker.ALLY) {
+					from = blockerPiece.getPosition().getRow() + 1;//one square above
+
+				}
+				else if (blockerType == Blocker.OPPONENT) {
+					from = blockerPiece.getPosition().getRow();//the square itself
+
+				}
+				
 				describe = currentPiece.getPosition().getColumn() + "" + from  + "-"   + to;
+
+				
 
 			}
 			break;
@@ -470,9 +504,24 @@ class Route {//to use position
 				to = 0;
 				describe = "0";
 			} else {
+				//11 U need to handle here the three cases. Currently it's fit to WALL. Make it fit to ally/opponent too. 
+				if (blockerType == Blocker.WALL) {
 
-				from = currentPiece.getPosition().getRow() + 1;
-				to = 8;
+					from = currentPiece.getPosition().getRow() + 1;
+					to = 8;
+
+				}
+				
+				else if (blockerType == Blocker.ALLY) {
+					from = blockerPiece.getPosition().getRow() - 1;//one square below
+
+				}
+				else if (blockerType == Blocker.OPPONENT) {
+					from = blockerPiece.getPosition().getRow();//the square itself
+
+				}
+				
+
 				describe = currentPiece.getPosition().getColumn() + "" + from  + "-"   + to;
 
 			}

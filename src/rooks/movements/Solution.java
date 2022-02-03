@@ -89,6 +89,8 @@ import java.util.stream.Collectors;
 public class Solution {
 //https://www.codingame.com/ide/puzzle/rooks-movements
 	public static void main(String args[]) {
+		
+		System.err.println("testing move: " + new Move(new Piece (new Position("d5"),'Q', 0) , new Position("d3"), true).getCombination());
 		System.out.println("ANSWER");
 		String[] inputs = {"d5"};
 		
@@ -156,6 +158,10 @@ class Position{
 		return "Position [column=" + column + ", row=" + row + "]";
 	}
 	
+	public String getPositionString() {
+		return column+""+row;
+	}
+	
 }
 
 class Rook extends Piece{
@@ -199,7 +205,6 @@ class Rook extends Piece{
 			Position piecePosition = piece.getPosition();
 			System.out.println((piecePosition.getColumn() < position.getColumn()) + " piece = " + piece);
 			if (piecePosition.getColumn() < position.getColumn()) {// left blocker
-			System.err.println("left??");
 				if (blockerPiecesMap.get(Direction.LEFT) == null
 						|| blockerPiecesMap.get(Direction.LEFT).getPosition().getColumn() < piecePosition.getColumn()) {// if it's closer to the rook
 					blockerPiecesMap.put(Direction.LEFT, piece);
@@ -261,7 +266,6 @@ class Rook extends Piece{
 	// Automatically set the available routes.
 	public void setAvailableRoutes() {
 		for (Map.Entry<Direction, Piece> entry : blockerPiecesMap.entrySet()) {
-//			bloc
 			availableRoutes.put(entry.getKey(), new Route(this, entry.getKey(), entry.getValue()));
 		}
 	}
@@ -605,6 +609,9 @@ class Piece{
 	public Position getPosition() {
 		return position;
 	}
+	
+	
+	
 	public void setPosition(Position position) {
 		this.position = position;
 	}
@@ -629,9 +636,73 @@ class Piece{
 	
 	
 }
-
+/**
+ * 
+ * @author lingar
+ *
+ *	piece = Rd5 
+ *	to = d3
+ *	isCapture = true; 
+ *
+ *result: 
+ *Rd5xd3
+ *
+ *piece = Rd5 
+ *	to = a3
+ *	isCapture = false; 
+ *
+ *result: 
+ *Rd5-a3
+ */
 class Move{
-	
+	//piece , position to, 
+		private Piece piece;
+		private Position toPosition;
+		private boolean isCapture;
+		private String combination;
+		public Move(Piece piece, Position toPosition, boolean isCapture) {
+			super();
+			this.piece = piece;
+			this.toPosition = toPosition;
+			this.isCapture = isCapture;
+			
+			combination = piece.getToolSign() + ""+ piece.getPosition().getPositionString() + (isCapture? 'x' : '-') + toPosition.getPositionString();
+		}
+		@Override
+		public String toString() {
+			return "Move [piece=" + piece + ", toPosition=" + toPosition + ", isCapture=" + isCapture + ", combination="
+					+ combination + "]";
+		}
+		public Piece getPiece() {
+			return piece;
+		}
+		public void setPiece(Piece piece) {
+			this.piece = piece;
+		}
+		public Position getToPosition() {
+			return toPosition;
+		}
+		public void setToPosition(Position toPosition) {
+			this.toPosition = toPosition;
+		}
+		public boolean isCapture() {
+			return isCapture;
+		}
+		public void setCapture(boolean isCapture) {
+			this.isCapture = isCapture;
+		}
+		public String getCombination() {
+			return combination;
+		}
+		public void setCombination(String combination) {
+			this.combination = combination;
+		}
+		
+		
+		
+		
+		
+		
 }
 
 

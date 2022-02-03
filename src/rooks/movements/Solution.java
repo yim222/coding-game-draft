@@ -174,11 +174,7 @@ class Rook extends Piece{
 //		Route route = new Route(this, Direction.RIGHT,  blockerPiecesMap.get(Direction.RIGHT));//
 		
 //		Route route = new Route(this, Direction.UP,  null);
-		Route route = new Route(this, Direction.UP,  blockerPiecesMap.get(Direction.UP));//
-
-
-		
-		System.err.println("blockerPieces = " +  blockerPieces + " \nRoute = " + route);
+		setAvailableRoutes();		
 	}
 	
 	public void getAndFilterPieces() {
@@ -262,6 +258,15 @@ class Rook extends Piece{
 		this.availableRoutes = availableRoutes;
 	}
 
+	// Automatically set the available routes.
+	public void setAvailableRoutes() {
+		for (Map.Entry<Direction, Piece> entry : blockerPiecesMap.entrySet()) {
+//			bloc
+			availableRoutes.put(entry.getKey(), new Route(this, entry.getKey(), entry.getValue()));
+		}
+	}
+	
+	
 	@Override
 	public String toString() {
 		return "Rook [position=" + position + ", availableRoutes=" + availableRoutes + ", blockerPiecesMap="

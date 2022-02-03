@@ -32,21 +32,23 @@ import java.util.List;
  * - create object Board, contains pieces and the rook. Also, Object position, Piece, Move (the string)-V
  * - Replace the using to use position. -V
  * - Create arrayList from the pieces. as static on the board. - V Done 
- * - On the rook create: - IN PROGRESS... - U HERE: the route generates proper routes according to the blocker piece provided. NEXT: 
+ * - On the rook create: - IN PROGRESS... -  the route generates proper routes according to the blocker piece provided. NEXT: 
  * 
  * U need to assign it into the rook, all the routes. 
  * Then do the below tasks. 
  * 
  * 		fields: moves[]
- * 		methods: calculate blockers - for the routes. calculateMoves - with the routes. Print Moves. 
+ * 		methods: calculate blockers - for the routes. calculateMoves - with the routes. Print Moves. - U here - see the other "u here".  
  * 
  * - At the end clean and write comments. 
  * 		
  */
 import java.util.Map;
+import java.util.SortedSet;
 import java.util.TreeMap;
-import java.util.stream.Collector;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
+
 
 /**
  * 
@@ -95,7 +97,7 @@ public class Solution {
 		String[] inputs = {"d5"};
 		
 		int [] colors = {1,0,0, 1, 1 , 1, 1};
-		String [] piecesProvided = {"c1", "e8", "d3", "b5", "a5" , "g5" , "d7"};
+		String [] piecesProvided = {"c1", "e8", "d2", "b5", "a5" , "g5" , "d7"};
 		
 		String rookPosition = inputs[0];// here is the string. 
 		
@@ -168,19 +170,23 @@ class Rook extends Piece{
 
 	private Map<Direction, Route> availableRoutes = new TreeMap<>();
 	private Map<Direction, Piece> blockerPiecesMap = new TreeMap<>();
-
 	private List<Piece> blockerPieces;
+	SortedSet<String> moveStrings = new TreeSet<String>();
+	
 	public Rook(Position position) {
 		super(position, 'R', 0);
 		getAndFilterPieces();
-
+		setAvailableRoutes();		
+		
+		generateMovesList();
+		
+//For testing
 //		Route route = new Route(this, Direction.DOWN,  null);
 //		Route route = new Route(this, Direction.DOWN,  blockerPiecesMap.get(Direction.DOWN));//
 //		Route route = new Route(this, Direction.RIGHT,  null);
 //		Route route = new Route(this, Direction.RIGHT,  blockerPiecesMap.get(Direction.RIGHT));//
 		
 //		Route route = new Route(this, Direction.UP,  null);
-		setAvailableRoutes();		
 	}
 	
 	public void getAndFilterPieces() {
@@ -270,14 +276,66 @@ class Rook extends Piece{
 		}
 	}
 	
+	//now we need to do move generator, sorted alphabetically  
+	
 	
 	@Override
 	public String toString() {
 		return "Rook [position=" + position + ", availableRoutes=" + availableRoutes + ", blockerPiecesMap="
 				+ blockerPiecesMap + ", blockerPieces=" + blockerPieces + "]";
 	}
+	//Use sorted set 	https://www.geeksforgeeks.org/sortedset-java-examples/
+	public void generateMovesList() {
+		//U need to iterate in the right way according to the direction...
+		
+		//iterate the routes 
+		
+		//each route:
+			//U need to iterate on the range and generates the "to" position, until no more.consider case 0, which is empty. 
+			//assumption - from <=to. if them zero - no route.
+		//
+		for (Map.Entry<Direction, Route> entry: availableRoutes.entrySet()) {
+			if(entry.getValue().to <1) {//this route is empty
+				continue;
+			}
+			
+			boolean horizonalRoute = entry.getKey().equals(Direction.LEFT) || entry.getKey().equals(Direction.RIGHT);
+			
+			for(int i = entry.getValue().from; i <= entry.getValue().to; i++) {
+				Move move;
+				if(horizonalRoute) {
+					//case left\right - we take the col of this rook, and add them the range of the route as line number: 
+					Position to = new Position(this.position.getColumn(), i);
+					move = new  Move(this, to, entry.getValue().blockerType == Blocker.OPPONENT);
+					
+					moveStrings.add(move.getCombination());
 
-	
+				}
+				else {
+					//case up\down - we take the range of the route as col char (+96) and then the line of this rook.
+					Position to = new Position((char)(i + 96), this.getPosition().getRow()); 
+					move = new  Move(this, to, entry.getValue().blockerType == Blocker.OPPONENT);
+					
+					moveStrings.add(move.getCombination());
+
+				}
+			}
+			System.err.println("all available moves: \n"+ moveStrings );
+			
+			//U here - U did the adding but it's not sorted well, because It's considering the x. 
+			//U need to think on way to sort it in different way. The assumption is that the from position is always the same, 
+			//.. so all you need is to sort according to the to position. So maybe save them as "move" and at the printing show the combination..
+//			[Rd5-c5, Rd5-d5, Rd5xd2, Rd5xd3, Rd5xd5, Rd5xd6, Rd5xd7, Rd5xf5, Rd5xg5]
+
+		}
+		
+		
+		
+		//Inserting it to the set will do the job. 
+		
+		//then all remains is to print it. 
+
+	}
 	
 	
 	

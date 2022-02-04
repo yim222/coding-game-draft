@@ -39,11 +39,10 @@ import java.util.List;
  * Then do the below tasks. 
  * 
  * 		fields: moves[]
- * 		methods: calculate blockers - for the routes. calculateMoves - with the routes. Print Moves. - U here -we almost there
- * 			but there is a problem . the opponent sign check by to, and the route is ascending order, so in the left and down sign it's not
- * 			calculating well. 
- * 
- * 		make an inner condition before looping to know what is the index to check, from or to. then it will working.
+ * 		methods: calculate blockers - for the routes. calculateMoves - with the routes. Print Moves. - 
+ * 			
+ * 		U here - seems to be working - NEXT - move it to the website and check that it's working. 
+ * When does - do cleaning and write simple comments (make review to Urself)
  * 
  * - At the end clean and write comments. 
  * 		
@@ -101,9 +100,9 @@ public class Solution {
 		System.out.println("ANSWER");
 		String[] inputs = {"d5"};
 //		int [] colors = {1,0,0, 1, 1 , 1, 1};
-		int [] colors = {0,1, 1};//like the test
+		int [] colors = {0,1};//like the test
 				
-		String [] piecesProvided = {"c1", "e8", "b5"};
+		String [] piecesProvided = {"c1", "e8"};
 //		String [] piecesProvided = {"c1", "e8"};//like the test
 
 		

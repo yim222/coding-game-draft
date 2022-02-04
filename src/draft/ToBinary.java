@@ -1,10 +1,9 @@
 package draft;
-
+//import Rook f
 import java.util.Arrays;
-import java.util.Scanner;
 
 public class ToBinary {
-
+//	Rook r;
 	public static void main(String args[]) {
 
 		String organized = "a b c";

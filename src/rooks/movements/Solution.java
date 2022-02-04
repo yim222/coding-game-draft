@@ -39,7 +39,11 @@ import java.util.List;
  * Then do the below tasks. 
  * 
  * 		fields: moves[]
- * 		methods: calculate blockers - for the routes. calculateMoves - with the routes. Print Moves. - U here - see the other "u here".  
+ * 		methods: calculate blockers - for the routes. calculateMoves - with the routes. Print Moves. - U here -we almost there
+ * 			but there is a problem . the opponent sign check by to, and the route is ascending order, so in the left and down sign it's not
+ * 			calculating well. 
+ * 
+ * 		make an inner condition before looping to know what is the index to check, from or to. then it will working.
  * 
  * - At the end clean and write comments. 
  * 		
@@ -97,10 +101,10 @@ public class Solution {
 		System.out.println("ANSWER");
 		String[] inputs = {"d5"};
 //		int [] colors = {1,0,0, 1, 1 , 1, 1};
-		int [] colors = {0,1};//like the test
+		int [] colors = {0,1, 1};//like the test
 				
-//		String [] piecesProvided = {"c1", "e8", "d2", "b5", "a5" , "g5" , "d7"};
-		String [] piecesProvided = {"c1", "e8", "d2", "b5", "a5" , "g5" , "d7"};//like the test
+		String [] piecesProvided = {"c1", "e8", "b5"};
+//		String [] piecesProvided = {"c1", "e8"};//like the test
 
 		
 		String rookPosition = inputs[0];// here is the string. 
@@ -303,25 +307,40 @@ class Rook extends Piece{
 			}
 			
 			boolean horizonalRoute = entry.getKey().equals(Direction.LEFT) || entry.getKey().equals(Direction.RIGHT);
+			int indexToCheckOpp = entry.getKey().equals(Direction.LEFT) || entry.getKey().equals(Direction.UP) ? entry.getValue().from : entry.getValue().to;
 			//problems - not generating right in the down route
 			for(int i = entry.getValue().from; i <= entry.getValue().to; i++) {
 				Move move;
 				if(horizonalRoute) {
-					//case left\right - we take the col of this rook, and add them the range of the route as line number: 
-					Position to = new Position(this.position.getColumn(), i);
-					move = new  Move(this, to, entry.getValue().blockerType == Blocker.OPPONENT);//not good. Because although it's blocker, only on the square itself
-					//is x not all. 
+					//case left\right - we take the range of the route as col char (+96) and then the line of this rook. 
+//					Position to = new Position(this.position.getColumn(), i);
+					Position to = new Position((char)(i + 96), this.getPosition().getRow());
+//					move = new  Move(this, to, entry.getValue().blockerType == Blocker.OPPONENT);//not good. Because although it's blocker, only on the square itself
+					if (i == indexToCheckOpp &&  entry.getValue().blockerType == Blocker.OPPONENT) {
+						move = new  Move(this, to, true);
+
+					}else {
+						move = new  Move(this, to, false);
+
+					}
+					
 					
 					movesStrings.add(move.getCombination());
 					movesList.add(move);
 
 				}
 				else {
-					//case up\down - we take the range of the route as col char (+96) and then the line of this rook. -- suppose to be vice versa
-//					Position to = new Position(this.position.getColumn(), i);
+					//case up\down - we take the col of this rook, and add them the range of the route as line number: 
+					Position to = new Position(this.position.getColumn(), i);
 
-					Position to = new Position((char)(i + 96), this.getPosition().getRow()); 
-					move = new  Move(this, to, entry.getValue().blockerType == Blocker.OPPONENT);
+//					Position to = new Position((char)(i + 96), this.getPosition().getRow()); 
+					if (i == indexToCheckOpp &&  entry.getValue().blockerType == Blocker.OPPONENT) {
+						move = new  Move(this, to, true);
+
+					}else {
+						move = new  Move(this, to, false);
+
+					}
 					
 					movesStrings.add(move.getCombination());
 					movesList.add(move);
@@ -331,10 +350,7 @@ class Rook extends Piece{
 			}
 			
 			
-			//U here - U did the adding but it's not sorted well, because It's considering the x. 
-			//U need to think on way to sort it in different way. The assumption is that the from position is always the same, 
-			//.. so all you need is to sort according to the to position. So maybe save them as "move" and at the printing show the combination..
-//			[Rd5-c5, Rd5-d5, Rd5xd2, Rd5xd3, Rd5xd5, Rd5xd6, Rd5xd7, Rd5xf5, Rd5xg5]
+			
 
 		}
 		System.err.println("all available moves: \n"+ movesStrings );

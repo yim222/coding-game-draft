@@ -125,7 +125,9 @@ public class Solution {
             Board.addPiece(piece);
             
 		}
-	
+		//creating the rook..
+		Rook r = new Rook(new Position(rookPosition));
+		System.out.println("rook = " + r);
 		System.out.println("ANSWER");
 	}
 
@@ -301,7 +303,7 @@ class Rook extends Piece{
 			}
 			
 			boolean horizonalRoute = entry.getKey().equals(Direction.LEFT) || entry.getKey().equals(Direction.RIGHT);
-			
+			//problems - not generating right in the down route
 			for(int i = entry.getValue().from; i <= entry.getValue().to; i++) {
 				Move move;
 				if(horizonalRoute) {
@@ -315,7 +317,9 @@ class Rook extends Piece{
 
 				}
 				else {
-					//case up\down - we take the range of the route as col char (+96) and then the line of this rook.
+					//case up\down - we take the range of the route as col char (+96) and then the line of this rook. -- suppose to be vice versa
+//					Position to = new Position(this.position.getColumn(), i);
+
 					Position to = new Position((char)(i + 96), this.getPosition().getRow()); 
 					move = new  Move(this, to, entry.getValue().blockerType == Blocker.OPPONENT);
 					
@@ -325,15 +329,7 @@ class Rook extends Piece{
 
 				}
 			}
-			System.err.println("all available moves: \n"+ movesStrings );
 			
-			System.out.println("try1:\n");
-			System.out.print("[");
-			for(Move m : movesList ) {
-				System.out.print(m.getCombination() +",");
-			}
-			System.out.print("]\n");
-
 			
 			//U here - U did the adding but it's not sorted well, because It's considering the x. 
 			//U need to think on way to sort it in different way. The assumption is that the from position is always the same, 
@@ -341,6 +337,15 @@ class Rook extends Piece{
 //			[Rd5-c5, Rd5-d5, Rd5xd2, Rd5xd3, Rd5xd5, Rd5xd6, Rd5xd7, Rd5xf5, Rd5xg5]
 
 		}
+		System.err.println("all available moves: \n"+ movesStrings );
+		
+		System.out.println("try1:\n");
+		System.out.print("[");
+		for(Move m : movesList ) {
+			System.out.print(m.getCombination() +",");
+		}
+		System.out.print("]\n");
+
 		
 		
 		

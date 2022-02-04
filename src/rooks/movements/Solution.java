@@ -2,6 +2,7 @@ package rooks.movements;
 //https://www.codingame.com/ide/puzzle/rooks-movements
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 /**
  * 
@@ -171,7 +172,10 @@ class Rook extends Piece{
 	private Map<Direction, Route> availableRoutes = new TreeMap<>();
 	private Map<Direction, Piece> blockerPiecesMap = new TreeMap<>();
 	private List<Piece> blockerPieces;
-	SortedSet<String> moveStrings = new TreeSet<String>();
+	SortedSet<String> movesStrings = new TreeSet<String>();
+	Comparator<Move> comprator = new CompareMoves();
+	SortedSet<Move> movesList = new TreeSet<Move>(comprator);
+
 	
 	public Rook(Position position) {
 		super(position, 'R', 0);
@@ -306,9 +310,11 @@ class Rook extends Piece{
 				if(horizonalRoute) {
 					//case left\right - we take the col of this rook, and add them the range of the route as line number: 
 					Position to = new Position(this.position.getColumn(), i);
-					move = new  Move(this, to, entry.getValue().blockerType == Blocker.OPPONENT);
+					move = new  Move(this, to, entry.getValue().blockerType == Blocker.OPPONENT);//not good. Because although it's blocker, only on the square itself
+					//is x not all. 
 					
-					moveStrings.add(move.getCombination());
+					movesStrings.add(move.getCombination());
+					movesList.add(move);
 
 				}
 				else {
@@ -316,11 +322,21 @@ class Rook extends Piece{
 					Position to = new Position((char)(i + 96), this.getPosition().getRow()); 
 					move = new  Move(this, to, entry.getValue().blockerType == Blocker.OPPONENT);
 					
-					moveStrings.add(move.getCombination());
+					movesStrings.add(move.getCombination());
+					movesList.add(move);
+
 
 				}
 			}
-			System.err.println("all available moves: \n"+ moveStrings );
+			System.err.println("all available moves: \n"+ movesStrings );
+			
+			System.out.println("try1:\n");
+			System.out.print("[");
+			for(Move m : movesList ) {
+				System.out.print(m.getCombination() +",");
+			}
+			System.out.print("]\n");
+
 			
 			//U here - U did the adding but it's not sorted well, because It's considering the x. 
 			//U need to think on way to sort it in different way. The assumption is that the from position is always the same, 
@@ -340,6 +356,8 @@ class Rook extends Piece{
 	
 	
 }
+
+
 
 /**
  * Generates by the piece and the other data the right route direction
@@ -610,6 +628,20 @@ class Route {//to use position
 	
 
 }
+
+
+class CompareMoves implements Comparator<Move>{
+	
+	public int compare(Move a, Move b){
+		
+		
+		return a.getToPosition().getPositionString().compareTo(b.getToPosition().getPositionString());
+		
+//		return 0;
+	}
+	
+}
+
 
 class Board{
 	public Board (Rook myRook) {

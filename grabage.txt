@@ -1,0 +1,8 @@
+		
+//For testing
+//		Route route = new Route(this, Direction.DOWN,  null);
+//		Route route = new Route(this, Direction.DOWN,  blockerPiecesMap.get(Direction.DOWN));//
+//		Route route = new Route(this, Direction.RIGHT,  null);
+//		Route route = new Route(this, Direction.RIGHT,  blockerPiecesMap.get(Direction.RIGHT));//
+		
+//		Route route = new Route(this, Direction.UP,  null);

@@ -93,22 +93,31 @@ public class Solution {
 //https://www.codingame.com/ide/puzzle/rooks-movements
 	public static void main(String args[]) {
 		
-		System.err.println("testing move: " + new Move(new Piece (new Position("d5"),'Q', 0) , new Position("d3"), true).getCombination());
+//		
 		System.out.println("ANSWER");
 		String[] inputs = {"d5"};
-		
-		int [] colors = {1,0,0, 1, 1 , 1, 1};
-		String [] piecesProvided = {"c1", "e8", "d2", "b5", "a5" , "g5" , "d7"};
+//		int [] colors = {1,0,0, 1, 1 , 1, 1};
+		int [] colors = {0,1};//like the test
+				
+//		String [] piecesProvided = {"c1", "e8", "d2", "b5", "a5" , "g5" , "d7"};
+		String [] piecesProvided = {"c1", "e8", "d2", "b5", "a5" , "g5" , "d7"};//like the test
+
 		
 		String rookPosition = inputs[0];// here is the string. 
 		
 		char column = rookPosition.charAt(0);
 		int row = Integer.parseInt(rookPosition.charAt(1)+"");
-		int cv = 'b' - 96;
-		System.out.println(cv);
+		int cv = 'h' - 96;
+		System.out.println(cv + " char value = " + cv);
+		
+		
+		System.out.println("That's the loop of the program- don't delete");
+
+		System.out.println("getting provided pieces...");
 		for (int i = 0; i < colors.length ; i++ ) {
-			int colour = colors[i];
-            String onePiece = piecesProvided[i];
+			
+			int colour = colors[i];//toReplace
+            String onePiece = piecesProvided[i];//toReplace
             
             Position piecePosition = new Position(onePiece);
             Piece piece = new Piece(piecePosition, colour);
@@ -116,10 +125,6 @@ public class Solution {
             Board.addPiece(piece);
             
 		}
-		System.err.println("Board pieces test - " + Board.pieces);
-		Position position1 = new Position(column, row);
-		Rook rook1 = new Rook(new Position(rookPosition));
-		System.err.println("rook1 = " + rook1);
 	
 		System.out.println("ANSWER");
 	}
@@ -180,17 +185,9 @@ class Rook extends Piece{
 	public Rook(Position position) {
 		super(position, 'R', 0);
 		getAndFilterPieces();
-		setAvailableRoutes();		
-		
+		setAvailableRoutes();				
 		generateMovesList();
-		
-//For testing
-//		Route route = new Route(this, Direction.DOWN,  null);
-//		Route route = new Route(this, Direction.DOWN,  blockerPiecesMap.get(Direction.DOWN));//
-//		Route route = new Route(this, Direction.RIGHT,  null);
-//		Route route = new Route(this, Direction.RIGHT,  blockerPiecesMap.get(Direction.RIGHT));//
-		
-//		Route route = new Route(this, Direction.UP,  null);
+
 	}
 	
 	public void getAndFilterPieces() {
@@ -213,7 +210,7 @@ class Rook extends Piece{
 		blockerPieces.stream().forEach((piece) -> {
 
 			Position piecePosition = piece.getPosition();
-			System.out.println((piecePosition.getColumn() < position.getColumn()) + " piece = " + piece);
+//			System.out.println((piecePosition.getColumn() <.getColumn()) + " piece = " + piece);
 			if (piecePosition.getColumn() < position.getColumn()) {// left blocker
 				if (blockerPiecesMap.get(Direction.LEFT) == null
 						|| blockerPiecesMap.get(Direction.LEFT).getPosition().getColumn() < piecePosition.getColumn()) {// if it's closer to the rook
@@ -391,7 +388,7 @@ class Route {//to use position
 		this.currentPiece = currentPiece;
 		this.direction = direction;
 		this.blockerPiece = blockerPiece;
-		System.err.println("??/ rook sign = " + currentPiece.getToolSign());
+//		System.err.println("??/ rook sign = " + currentPiece.getToolSign());
 
 		switch(currentPiece.getToolSign()) {
 		case 'R':
@@ -486,7 +483,7 @@ class Route {//to use position
 	
 	
 	public void generatePathsForRook() {//to use position
-		System.err.println("Testing - generatePathsForRook");
+//		System.err.println("Testing - generatePathsForRook");
 		//first set the blockerType
 		if(blockerPiece != null && blockerPiece.getColor() == currentPiece.getColor()) {
 			blockerType = Blocker.ALLY;
@@ -663,6 +660,8 @@ class Piece{
 	protected char toolSign = '*';// * = unknown
 	protected int color;//color is either 0 (WHITE) or 1 (BLACK)
 	
+	
+//	public static ArrayList<Piece> pieces
 
 	
 	

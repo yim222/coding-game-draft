@@ -41,8 +41,12 @@ import java.util.List;
  * 		fields: moves[]
  * 		methods: calculate blockers - for the routes. calculateMoves - with the routes. Print Moves. - 
  * 			
- * 		U here - seems to be working - NEXT - move it to the website and check that it's working. 
- * When does - do cleaning and write simple comments (make review to Urself)
+ * 		U here - seems to be working - NEXT - 
+ * 		Do nice printing. 
+ * 			U can see the test cases, so start in your here. 
+ * 		Check the result at excel (easy to copy paste and count.)
+ * 		after it's working - move it to the website and check that it's working. 
+ * When does - do cleaning and write simple comments (make review to Urself). 
  * 
  * - At the end clean and write comments. 
  * 		

@@ -356,14 +356,20 @@ class Rook extends Piece{
 			
 
 		}
-		System.err.println("all available moves: \n"+ movesStrings );
+//		System.err.println("all available moves: \n"+ movesStrings );
+//		
+//		System.out.println("try1:\n");
+//		System.out.print("[");
+//		for(Move m : movesList ) {
+//			System.out.print(m.getCombination() +",");
+//		}
+//		System.out.print("]\n");
 		
-		System.out.println("try1:\n");
-		System.out.print("[");
-		for(Move m : movesList ) {
-			System.out.print(m.getCombination() +",");
-		}
-		System.out.print("]\n");
+		
+		movesList.stream().forEach((m) ->{
+			
+			System.out.println(m.getCombination());
+		});;
 
 		
 		

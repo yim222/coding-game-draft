@@ -327,7 +327,7 @@ class Rook extends Piece{
 			}
 			
 			boolean horizonalRoute = entry.getKey().equals(Direction.LEFT) || entry.getKey().equals(Direction.RIGHT);
-			int indexToCheckOpp = entry.getKey().equals(Direction.LEFT) || entry.getKey().equals(Direction.UP) ? entry.getValue().from : entry.getValue().to;
+			int indexToCheckOpp = entry.getKey().equals(Direction.LEFT) || entry.getKey().equals(Direction.DOWN) ? entry.getValue().from : entry.getValue().to;
 			//problems - not generating right in the down route
 			for(int i = entry.getValue().from; i <= entry.getValue().to; i++) {
 				Move move;
@@ -679,7 +679,8 @@ class CompareMoves implements Comparator<Move>{
 	public int compare(Move a, Move b){
 		
 		
-		return a.getToPosition().getPositionString().compareTo(b.getToPosition().getPositionString());
+//		return a.getToPosition().getPositionString().compareTo(b.getToPosition().getPositionString());//actually they want to calculate also the x. SO it's different
+		return a.getCombination().compareTo(b.getCombination());
 		
 //		return 0;
 	}

@@ -115,10 +115,16 @@ public class Solution {
 //		int [] colors = {0, 1, 0, 1, 0};//like the test	
 //		String [] piecesProvided = {"e8", "d7", "c6", "b5", "a4"};
 		
-		//CASE 3 --> PASSED
+//		//CASE 3 --> PASSED
+//		String[] inputs = {"d5"};
+//		int [] colors = {0, 0};//like the test	
+//		String [] piecesProvided = {"g5", "d2"};
+		
+		//CASE 4 --> PASSED
 		String[] inputs = {"d5"};
-		int [] colors = {0, 0};//like the test	
-		String [] piecesProvided = {"g5", "d2"};
+		int [] colors = {0, 0, 1};//like the test	
+		String [] piecesProvided = {"g5", "d2", "d7"};
+
 
 		
 		String rookPosition = inputs[0];// here is the string. 

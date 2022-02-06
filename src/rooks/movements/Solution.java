@@ -41,12 +41,7 @@ import java.util.List;
  * 		fields: moves[]
  * 		methods: calculate blockers - for the routes. calculateMoves - with the routes. Print Moves. - 
  * 			
- * 		U here - seems to be working - NEXT - 
- * 		Do nice printing. 
- * 			U can see the test cases, so start in your here. 
- * 		Check the result at excel (easy to copy paste and count.)
- * 		after it's working - move it to the website and check that it's working. 
- * When does - do cleaning and write simple comments (make review to Urself). 
+ * 		
  * 
  * - At the end clean and write comments. 
  * 		
@@ -57,6 +52,23 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
+/**
+ * U HERE: 
+ * Great and thanks to God - it's working well. 
+ * 
+ *  Next: cleaning:
+ *  
+ *  Do all OO? No  , it's enough. 
+ *  Just delete comments and drafts, make renaming if needed and write short and informative comments. 
+ *  
+ *  Write marketing text - 
+ *  Izhar Mashkif (lingar) 
+ *  A web development consulting contractor. 
+ *  Handling all process steps ... etc. 
+ *  
+ *  Publish it. 
+ *  No more then a hour
+ */
 
 /**
  * 
@@ -137,7 +149,7 @@ public class Solution {
 		
 		System.out.println("That's the loop of the program- don't delete");
 
-		System.out.println("getting provided pieces...");
+		System.err.println("getting provided pieces...");
 		for (int i = 0; i < colors.length ; i++ ) {
 			
 			int colour = colors[i];//toReplace

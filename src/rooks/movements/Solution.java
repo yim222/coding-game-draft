@@ -102,12 +102,18 @@ public class Solution {
 		
 //		
 		System.out.println("ANSWER");
-		String[] inputs = {"d5"};
-//		int [] colors = {1,0,0, 1, 1 , 1, 1};
-		int [] colors = {0,1};//like the test
-				
-		String [] piecesProvided = {"c1", "e8"};
-//		String [] piecesProvided = {"c1", "e8"};//like the test
+		
+		/*****************TESTING*****************************************/
+		//U can see the tests inputs at the task page...
+		//CASE 1 --> PASSED
+//		String[] inputs = {"d5"};
+//		int [] colors = {0,1};//like the test	
+//		String [] piecesProvided = {"c1", "e8"};
+		
+		//CASE 2 --> PASSED
+		String[] inputs = {"a8"};
+		int [] colors = {0, 1, 0, 1, 0};//like the test	
+		String [] piecesProvided = {"e8", "d7", "c6", "b5", "a4"};
 
 		
 		String rookPosition = inputs[0];// here is the string. 

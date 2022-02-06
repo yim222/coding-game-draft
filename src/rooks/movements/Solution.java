@@ -1,6 +1,6 @@
 package rooks.movements;
 //https://www.codingame.com/ide/puzzle/rooks-movements
-
+//ALL IS READY. ALL CASES (and more) PASSED well
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;

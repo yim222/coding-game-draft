@@ -4,6 +4,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public class FifaPoints {
 	static FifaPoints fInstance = new FifaPoints();
@@ -27,8 +30,24 @@ public class FifaPoints {
 			
 			System.out.println("Our teams: \n" +  Arrays.toString(teams));
 			// create teams and btw calculate by the provided string[]
+			
+			//converting to list: 
+			List<Team> teamsList = Arrays.asList(teams);
+			
+			System.out.println("list = \n" + teamsList);
+			Collections.sort(teamsList, new SortTable());
+			
 
 			// rank them properly
+			System.out.println("list after sorting= \n" + teamsList);
+			
+			//print result 
+			for (Team t: teamsList) {
+				System.out.print(t.sign+" ");
+			}
+			
+			
+
 		}
 
 		// parse the match - prepare the data
@@ -135,6 +154,28 @@ public class FifaPoints {
 
 	}
 
+	class SortTable implements Comparator<Team>{
+		public int compare(Team a, Team b) {
+			
+			if(a.points != b.points) {
+				
+				if( a.points>b.points) 
+					return -1;
+				else 
+					return 1;
+			}
+			else {
+				if(a.positiveGoals-a.negativeGoals != b.positiveGoals - b.negativeGoals) {
+					return a.positiveGoals-a.negativeGoals > b.positiveGoals - b.negativeGoals ?  -1: 1;
+				}
+				else {
+					return a.positiveGoals > b.positiveGoals ? -1 : 1;
+				}
+			
+			}
+		}
+	}
+	
 	public static void main(String[] args) {
 		// get the data from file, and parse it into array
 		String[] groupData = new String[6];

@@ -1,6 +1,6 @@
-Ru As 5-0
-Eg Ur 0-1
-Ru Eg 3-1
-Ur As 1-0
-Ur Ru 3-0
-As Eg 2-1
+ra pm 0-2
+aa ra 3-0
+pm aa 2-2
+pm gf 0-4
+gf ra 4-4
+aa gf 6-6

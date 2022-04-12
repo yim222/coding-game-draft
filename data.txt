@@ -1,0 +1,6 @@
+Ru As 5-0
+Eg Ur 0-1
+Ru Eg 3-1
+Ur As 1-0
+Ur Ru 3-0
+As Eg 2-1

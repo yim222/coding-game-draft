@@ -6,6 +6,37 @@ public class Ms2FormattedTime {
 	static long D = 12_000_000;// 980287204;// 12_000_000;
 
 	public static void main(String args[]) {
+		
+		
+		String s = ""
+			+"LoremIpsumissimplydummytextofthe\r\n"
+			+ "printingandtypesettingindustryLorem\r\n"
+			+ "Ipsumhasbeentheindustrysstandard\r\n"
+			+ "dummytexteversincetheswhenan\r\n"
+			+ "unknownprintertookagalleyoftype\r\n"
+			+ "andscrambledittomakeatypespecimen\r\n"
+			+ "bookIthassurvivednotonlyfive\r\n"
+			+ "centuriesbutalsotheleapinto\r\n"
+			+ "electronictypesettingremaining\r\n"
+			+ "essentiallyunchangedItwas\r\n"
+			+ "popularisedintheswiththe\r\n"
+			+ "releaseofLetrasetsheetscontaining\r\n"
+			+ "LoremIpsumpassagesandmorerecently\r\n"
+			+ "withdesktoppublishingsoftwarelike\r\n"
+			+ "AldusPageMakerincludingversionsof\r\n"
+			+ "";
+		int x = 0; int y  = 0;
+		for (char ch : s.toCharArray()) {
+			if(ch == 'a' || ch == 'e' || ch == 'i' || ch == 'o' || ch == 'u' )
+				y++;
+				else
+						x++;
+		}
+		System.out.println(x*y);
+		
+		
+		char c= 'c';
+		System.out.println(Character.isUpperCase(c) + " | " + Character.isAlphabetic(c));
 		/**
 		 * TESTING: 
 		 * 12000000 

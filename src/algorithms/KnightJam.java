@@ -2,9 +2,9 @@ package algorithms;
 //check for eclipse
 import java.util.List;
 
-// TODO NExt - create Empty methods for all needed below. 
-//Create needed tests for that. 
-//Start develop with that. 
+// TODO NExt - create Empty methods for all needed below. -done
+//Create needed tests for that. -done
+//Start develop with that.--> u here
 /**
  * 
  * @author lingar

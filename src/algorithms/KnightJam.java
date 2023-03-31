@@ -1,10 +1,11 @@
 package algorithms;
+
 //check for eclipse
 import java.util.List;
 
 // TODO NExt - create Empty methods for all needed below. -done
 //Create needed tests for that. -done
-//Start develop with that.--> u here
+//Start develop with that.--> u here there is some unexpected behavior in test Run. Debug it, and understand where is the problem.  
 /**
  * 
  * @author lingar
@@ -72,8 +73,8 @@ import java.util.List;
  * 
  *         TODO:
  * 
- *         Method - Get squares that return the possible paths - with param of the
- *         square, and one method for last, that will return the other. - V
+ *         Method - Get squares that return the possible paths - with param of
+ *         the square, and one method for last, that will return the other. - V
  * 
  *         Method - setState that change the state by itself and last checked.
  * 
@@ -83,7 +84,7 @@ import java.util.List;
  * 
  *         To check - if it's true - if does to return the count. To check if
  *         it's already exist - return -1. To save the sequence. To run on the
- *         new sequence. if not - to run more... until u return the count. 
+ *         new sequence. if not - to run more... until u return the count.
  * 
  *         -so save path 1 and 2. - to get the max from them.
  * 
@@ -98,43 +99,99 @@ public class KnightJam {
 
 	// * Method - Get path that return the possible squares - with param of the
 	// square, and one method for last, that will return the other.
-	
-	public KnightJam(String state ) {
+
+	public KnightJam(String state) {
 		this.state = state;
 	}
-	
+
 	public String state = "";
-	
+
 	public void setState(int lastChecked) {
-		//if -1 it's the first time. return
-		
-		state = "TODO";
-		
+		// if -1 it's the first time. return
+		// getSquares(current, last)
+
+		int currentSquare = this.state.indexOf('.') + 1;
+		int nextSquad = getSquares(currentSquare, lastChecked);
+
+//		System.out.println( 
+//				"state = " + state
+//				+ " | current = "+ (currentSquare)
+//				+ " |next = " + nextSquad);
+
+		// manipulating string.
+		// putting the point at the right place first.
+		String state2 = "init";
+		if (nextSquad < currentSquare) {
+			System.out.println("state = " + state);
+			state2 = state.substring(0, nextSquad - 1) + '.' + state.substring(nextSquad, currentSquare - 1)
+					+ state.charAt(nextSquad - 1) + state.substring(currentSquare);
+
+//			state = state.substring(0, nextSquad-1) + '.' 
+//			+ state.substring(nextSquad +1, currentSquare) 
+//			+ state.charAt(nextSquad-1)
+//			+ state.substring(currentSquare);
+
+		} else {
+			state2 = state.substring(0, currentSquare - 1) + state.charAt(nextSquad - 1)
+					+ state.substring(currentSquare, nextSquad - 1) + '.'
+					+state.substring(nextSquad);
+					//+ (nextSquad + 1 <= 8 ? state.substring(nextSquad) : "");
+		}
+//		System.out.println(state.substring(20,0));
+		state = state2;
+
 	}
-	
+	//debugger on exceptions - 
+	//https://stackoverflow.com/questions/3066199/break-when-exception-is-thrown
+
 	public int run(int count, String state, int lastChecked, List<String> alreadyChecked) {
-		//check if it's ordered
+		// check if it's ordered
+
+		boolean ordered = state.equals("12345678.");
+
+		// if true return the count
+		if (ordered) {
+			return count;
+		}
+
+		// if not ordered-
+		// if exist already - stop and return -1.
+		if (alreadyChecked.contains(state)) {
+			return -1;
+		}
+
+		// if not exist
+		// add to the exists
+		alreadyChecked.add(state);
+		// count
+		count++;
+
+		// get the next state and last checked
+		// next lastChecked
+		int tempLastChecked = state.indexOf('.')+1;
 		
-		//if true return the count
-		
-		//if not - 
-		//if exist already - stop and return -1. 
-		
-		//if not exist continue to roll it. 
-		
-		return 0;
+		setState(lastChecked);
+		lastChecked = tempLastChecked;
+
+		// continue to roll it.
+
+//		run(count, state, lastChecked, alreadyChecked);
+
+		return run(count, this.state, lastChecked, alreadyChecked);
 	}
-	
+
 	public int[] compareAndSolve() {
-		
+
 		/**
-		 * This will check both branches of the initial state. and compare what exist if does and what right. 
+		 * This will check both branches of the initial state. and compare what exist if
+		 * does and what right.
 		 */
-		//will return the number of the sequence from the less last checked, and the count. [1/2, count]
-		//if not exist both [-1,-1]
+		// will return the number of the sequence from the less last checked, and the
+		// count. [1/2, count]
+		// if not exist both [-1,-1]
 		return null;
 	}
-	
+
 	public static int[] getSquares(int emptySquare) {
 
 		switch (emptySquare) {
@@ -148,7 +205,7 @@ public class KnightJam {
 			return new int[] { 4, 8 };
 		case 4:
 			return new int[] { 3, 9 };
-		case 6: 
+		case 6:
 			return new int[] { 1, 7 };
 		case 7:
 			return new int[] { 2, 6 };
@@ -162,10 +219,10 @@ public class KnightJam {
 
 		}
 	}
-	
-	public static int getSquares(int emptySquare, int lastSqaure) {
+
+	public static int getSquares(int emptySquare, int lastSquare) {
 		int[] squares = getSquares(emptySquare);
-		return lastSqaure == squares[0]? squares[1]: squares[0];
+		return lastSquare == squares[0] ? squares[1] : squares[0];
 	}
 
 }
